@@ -1,77 +1,44 @@
 //Middleware de autenticacion;
-const tokenServices = require('../services/token');
+const tokenService = require('../services/token');
 
 module.exports = {
 
     verificarAdministrador: async(req, res, next) =>{
-    if (!req.headers.token) {
-        return res.status(404).send({
-            message: 'No token'
-        });
-
-    }else{
-        const validationResponse = await tokenServices.decode(req.headers.token);
-        if(validationResponse.rol === 'Administrador'){
-            next();
+        if(!req.headers.token){
+            return res.status(404).send({error:'No hay token'});
         }else{
-            return res.status(403).send({
-                            message: 'No autorizado' 
-        });
-    }
-}
-    },
-    verificarVendedor: async(req, res, next) =>{
-        if (!req.headers.token) {
-            return res.status(404).send({
-                message: 'No token'
-            });
-    
-        }else{
-            const validationResponse = await tokenServices.decode(req.headers.token);
-            console.log(validationResponse);
-
-            if(validationResponse.rol == 'Administrador' || validationResponse.rol === 'Vendedor' ){
+            const response = await tokenService.decode(req.headers.token);
+            // return res.status(403).send(tokenService.decode.req.headers.token)
+            if (response.rol === "Administrador"){
                 next();
             }else{
-                return res.status(403).send({
-                                message: 'No autorizado' 
-            });
-        }
-    }
-        },
-
-        verificarAlmacenero: async(req, res, next) =>{
-            if (!req.headers.token) {
-                return res.status(404).send({
-                    message: 'No token'
-                });
-        
-            }else{
-                const validationResponse = await tokenService.decode(req.headers.token);
-                if(validationResponse.rol == 'Administrador' || validationResponse.rol === 'Almacenero' ){
-                    next();
-                }else{
-                    return res.status(403).send({
-                                    message: 'No autorizado' 
-                });
+                //return response.rol;
+                 return res.status(403).send({error:'No Autorizado 1'});
             }
         }
-            },
-
+    },
+    verificarVendedor: async(req, res, next) =>{
+        if(!req.headers.token){
+            return res.status(404).send({error:'No hay token'});
+        }else{
+            const response = await tokenService.decode(req.headers.token);
+            if (response.rol === "Vendedor" || response.rol === "Administrador"){
+                next();
+            }else{
+                return res.status(403).send({error:'No Autorizado 2'});
+            }
+        }
+    },
+    verificarAlmacenero: async(req, res, next) =>{
+        if(!req.headers.token){
+            return res.status(404).send({error:'No hay token 3'});
+        }else{
+            const response =await tokenService.decode(req.headers.token);
+            if (response.rol === "Almacenero" || response.rol === "Administrador"){
+                next();
+            }else{
+                return res.status(403).send({error:'No Autorizado 3'});
+            }
+        }
+    },
 }
-
-    // verifyUsuario: async(req, res, next) => {
-    //     if (!req.headers.token) {
-    //         return res.status(404).send({
-    //             message: 'No token'
-    //         });
-    //     }
-    //     const response = await tokenService.decode(req.headers.token);
-    //     if (response.rol == 'Administrador' || response.rol == 'Vendedor' || response.rol == 'Almacenero') {
-    //         next();
-    //     } else {
-    //         return res.status(403).send({
-    //             message: 'No autorizado'
-    //         });
-    //     }
-    // },
