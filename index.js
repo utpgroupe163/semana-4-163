@@ -22,12 +22,16 @@ app.use('/api', router); //tener en cuenta es diferente
 
 app.set('port', process.env.PORT || 3000);
 
+//para heroku
+app.listen(app.get('port'),()=>{
+    console.log('Heroku Arriba');
+});
 
-
-if (process.env.NODE_ENV !== 'test') {
-    app.listen(app.get('port'), () => {
-        console.log('Server on port ' + app.get('port') + ' on dev');
-    });
-}
+//  original vanessa
+// if (process.env.NODE_ENV !== 'test') {
+//     app.listen(app.get('port'), () => {
+//         console.log('Server on port ' + app.get('port') + ' on dev');
+//     });
+// }
 
 module.exports = app;
