@@ -1,5 +1,5 @@
 const {Articulo} = require('../models');
-// const Categoria = require('../models').Categoria;
+const Categoria = require('../models').Categoria;
 
 exports.add = async (req, res, next) => {
     try {
@@ -22,12 +22,12 @@ exports.add = async (req, res, next) => {
 exports.list = async (req, res, next) => {
     try {
         const article = await Articulo.findAll(
-        // {
-        //     include: [{
-        //         model: Categoria,
-        //         as: 'categoria'
-        //     }],
-        // }
+        {
+            include: [{
+                model: Categoria,
+                as: 'categoria'
+            }],
+        }
         );
         if (article) {
             res.status(200).json(article);

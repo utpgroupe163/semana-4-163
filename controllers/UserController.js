@@ -16,14 +16,14 @@ exports.login = async(req, res, next) => {
 
                 }else{
                     res.status(401).json({
-                    error: 'Error en la validación'
+                    error: 'Contraseña incorrecta'
                     })
 
                 }
 
             }else{
                 res.status(404).json({
-                error: 'Error en la validación'
+                error: 'Usuario no existe'
                    })
                 }
             } catch (error) {
@@ -49,7 +49,7 @@ exports.register = async(req, res, next) =>{
     }catch (error){
         
         res.status(500).send({
-            message: 'Error->'
+            message: error.stack
         })
         next (error);
 
